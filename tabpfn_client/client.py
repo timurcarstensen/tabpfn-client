@@ -176,6 +176,8 @@ class ServiceClient:
         if not isinstance(result, dict):
             result = {"probas": result}
 
+        print("keys in result", result.keys())
+        
         for k in result:
             result[k] = np.array(result[k])
 
