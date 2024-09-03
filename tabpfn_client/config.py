@@ -16,9 +16,8 @@ class TabPFNConfig:
 g_tabpfn_config = TabPFNConfig()
 
 
-def init(use_server=True):
+def init(use_server: bool = True, verbose: bool = True):
     # initialize config
-    use_server = use_server
     global g_tabpfn_config
 
     if use_server:
@@ -34,14 +33,16 @@ def init(use_server=True):
         is_valid_token_set = user_auth_handler.try_reuse_existing_token()
 
         if isinstance(is_valid_token_set, bool) and is_valid_token_set:
-            PromptAgent.prompt_reusing_existing_token()
+            if verbose:
+                PromptAgent.prompt_reusing_existing_token()
         elif (
             isinstance(is_valid_token_set, tuple) and is_valid_token_set[1] is not None
         ):
             print("Your email is not verified. Please verify your email to continue...")
             PromptAgent.reverify_email(is_valid_token_set[1], user_auth_handler)
         else:
-            PromptAgent.prompt_welcome()
+            if verbose:
+                PromptAgent.prompt_welcome()
             if not PromptAgent.prompt_terms_and_cond():
                 raise RuntimeError(
                     "You must agree to the terms and conditions to use TabPFN"
