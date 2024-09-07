@@ -1,3 +1,4 @@
+importlib-metadata
 httpx
 omegaconf
 pandas
