@@ -1,13 +1,12 @@
-from typing_extensions import Optional, Tuple, Literal, Dict
 import logging
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 
 import numpy as np
-from tabpfn_client import init
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.utils.validation import check_is_fitted
+from typing_extensions import Dict, Literal, Optional, Tuple, Union
 
-from tabpfn_client import config
+from tabpfn_client import config, init
 
 logger = logging.getLogger(__name__)
 
@@ -116,7 +115,7 @@ class TabPFNClassifier(BaseEstimator, ClassifierMixin):
         self,
         model="latest_tabpfn_hosted",
         n_estimators: int = 4,
-        preprocess_transforms: Tuple[PreprocessorConfig, ...] = (
+        preprocess_transforms: Tuple[PreprocessorConfig, PreprocessorConfig] = (
             PreprocessorConfig(
                 "quantile_uni_coarse",
                 append_original=True,
@@ -236,7 +235,7 @@ class TabPFNRegressor(BaseEstimator, RegressorMixin):
         self,
         model: str = "latest_tabpfn_hosted",
         n_estimators: int = 8,
-        preprocess_transforms: Tuple[PreprocessorConfig, ...] = (
+        preprocess_transforms: Tuple[PreprocessorConfig, PreprocessorConfig] = (
             PreprocessorConfig(
                 "quantile_uni",
                 append_original=True,
@@ -253,27 +252,28 @@ class TabPFNRegressor(BaseEstimator, RegressorMixin):
         ] = "rmse",
         transformer_predict_kwargs: Optional[Dict] = None,
         softmax_temperature: Optional[float] = -0.1,
-        use_poly_features=False,
-        max_poly_features=50,
-        remove_outliers=-1,
+        use_poly_features: Optional[bool] = False,
+        max_poly_features: Optional[int] = 50,
+        remove_outliers: Optional[float] = -1,
         regression_y_preprocess_transforms: Optional[
             Tuple[
-                None
-                | Literal[
-                    "safepower",
-                    "power",
-                    "quantile_norm",
-                ],
-                ...,
+                Union[
+                    None,
+                    Literal[
+                        "safepower",
+                        "power",
+                        "quantile_norm",
+                    ],
+                ]
             ]
         ] = (
             None,
             "safepower",
         ),
-        add_fingerprint_features: bool = True,
-        cancel_nan_borders: bool = True,
-        super_bar_dist_averaging: bool = False,
-        subsample_samples: float = -1,
+        add_fingerprint_features: Optional[bool] = True,
+        cancel_nan_borders: Optional[bool] = True,
+        super_bar_dist_averaging: Optional[bool] = False,
+        subsample_samples: Optional[float] = -1,
     ):
         """
         Parameters:
