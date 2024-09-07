@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing_extensions import Literal
+from typing_extensions import Literal, Dict, Tuple, Union
 
 from tabpfn_client.client import ServiceClient
 from tabpfn_client.constants import CACHE_DIR
@@ -32,7 +32,7 @@ class UserAuthenticationClient(ServiceClientWrapper):
         self.CACHED_TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
         self.CACHED_TOKEN_FILE.write_text(access_token)
 
-    def validate_email(self, email: str) -> tuple[bool, str]:
+    def validate_email(self, email: str) -> Tuple[bool, str]:
         is_valid, message = self.service_client.validate_email(email)
         return is_valid, message
 
@@ -42,8 +42,8 @@ class UserAuthenticationClient(ServiceClientWrapper):
         password: str,
         password_confirm: str,
         validation_link: str,
-        additional_info: dict,
-    ) -> tuple[bool, str]:
+        additional_info: Dict,
+    ) -> Tuple[bool, str]:
         is_created, message, access_token = self.service_client.register(
             email, password, password_confirm, validation_link, additional_info
         )
@@ -51,7 +51,7 @@ class UserAuthenticationClient(ServiceClientWrapper):
             self.set_token(access_token)
         return is_created, message
 
-    def set_token_by_login(self, email: str, password: str) -> tuple[bool, str]:
+    def set_token_by_login(self, email: str, password: str) -> Tuple[bool, str]:
         access_token, message = self.service_client.login(email, password)
 
         if access_token is None:
@@ -60,7 +60,7 @@ class UserAuthenticationClient(ServiceClientWrapper):
         self.set_token(access_token)
         return True, message
 
-    def try_reuse_existing_token(self) -> bool | tuple[bool, str]:
+    def try_reuse_existing_token(self) -> Union[bool, Tuple[bool, str]]:
         if self.service_client.access_token is None:
             if not self.CACHED_TOKEN_FILE.exists():
                 return False
@@ -95,11 +95,11 @@ class UserAuthenticationClient(ServiceClientWrapper):
     def retrieve_greeting_messages(self):
         return self.service_client.retrieve_greeting_messages()
 
-    def send_reset_password_email(self, email: str) -> tuple[bool, str]:
+    def send_reset_password_email(self, email: str) -> Tuple[bool, str]:
         sent, message = self.service_client.send_reset_password_email(email)
         return sent, message
 
-    def send_verification_email(self, access_token: str) -> tuple[bool, str]:
+    def send_verification_email(self, access_token: str) -> Tuple[bool, str]:
         sent, message = self.service_client.send_verification_email(access_token)
         return sent, message
 
