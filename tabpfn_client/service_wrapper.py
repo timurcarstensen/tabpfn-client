@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Literal
+from typing_extensions import Literal
 
 from tabpfn_client.client import ServiceClient
 from tabpfn_client.constants import CACHE_DIR

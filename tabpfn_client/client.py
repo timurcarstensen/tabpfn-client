@@ -5,11 +5,11 @@ import re
 from pathlib import Path
 import httpx
 import logging
-from importlib.metadata import version, PackageNotFoundError
+from importlib_metadata import version, PackageNotFoundError
 import numpy as np
 from omegaconf import OmegaConf
 import json
-from typing import Literal
+from typing_extensions import Literal
 
 from tabpfn_client.tabpfn_common_utils import utils as common_utils
 
@@ -178,7 +178,7 @@ class ServiceClient:
 
         for k in result:
             result[k] = np.array(result[k])
-        
+
         return result
 
     @staticmethod
@@ -211,14 +211,10 @@ class ServiceClient:
                 f"Fail to call {method_name}, response status: {response.status_code}"
             )
             try:
-                if (
-                    len(
-                        reponse_split_up := response.text.split(
-                            "The following exception has occurred:"
-                        )
-                    )
-                    > 1
-                ):
+                reponse_split_up = response.text.split(
+                    "The following exception has occurred:"
+                )
+                if len(reponse_split_up) > 1:
                     relevant_reponse_text = reponse_split_up[1].split(
                         "debug_error_string"
                     )[0]

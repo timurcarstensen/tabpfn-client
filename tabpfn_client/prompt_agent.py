@@ -1,7 +1,7 @@
 import textwrap
 import getpass
 from password_strength import PasswordPolicy
-from typing import TYPE_CHECKING
+from typing_extensions import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from tabpfn_client.estimator import UserAuthenticationClient

@@ -1,4 +1,4 @@
-from typing import Optional, Tuple, Literal, Dict
+from typing_extensions import Optional, Tuple, Literal, Dict
 import logging
 from dataclasses import dataclass, asdict
 
