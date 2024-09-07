@@ -1,7 +1,7 @@
 import textwrap
 import getpass
 from password_strength import PasswordPolicy
-from typing_extensions import TYPE_CHECKING
+from typing_extensions import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from tabpfn_client.estimator import UserAuthenticationClient
@@ -15,7 +15,7 @@ class PromptAgent:
         return textwrap.indent(text, indent_str)
 
     @staticmethod
-    def password_req_to_policy(password_req: list[str]):
+    def password_req_to_policy(password_req: List[str]):
         """
         Small function that receives password requirements as a list of
         strings like "Length(8)" and returns a corresponding
@@ -242,7 +242,7 @@ class PromptAgent:
         return
 
     @classmethod
-    def prompt_retrieved_greeting_messages(cls, greeting_messages: list[str]):
+    def prompt_retrieved_greeting_messages(cls, greeting_messages: List[str]):
         for message in greeting_messages:
             print(cls.indent(message))
 
@@ -260,7 +260,7 @@ class PromptAgent:
         print(cls.indent("Your account has been deleted."))
 
     @classmethod
-    def _choice_with_retries(cls, prompt: str, choices: list) -> str:
+    def _choice_with_retries(cls, prompt: str, choices: List) -> str:
         """
         Prompt text and give user infinitely many attempts to select one of the possible choices. If valid choice
         is selected, return choice in lowercase.

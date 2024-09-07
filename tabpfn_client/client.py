@@ -9,7 +9,7 @@ from importlib_metadata import version, PackageNotFoundError
 import numpy as np
 from omegaconf import OmegaConf
 import json
-from typing_extensions import Literal
+from typing_extensions import Literal, List, Dict
 
 from tabpfn_client.tabpfn_common_utils import utils as common_utils
 
@@ -128,7 +128,7 @@ class ServiceClient:
         x_test,
         task: Literal["classification", "regression"],
         tabpfn_config: dict | None = None,
-    ) -> dict[str, np.ndarray]:
+    ) -> Dict[str, np.ndarray]:
         """
         Predict the class labels for the provided data (test set).
 
@@ -434,7 +434,7 @@ class ServiceClient:
             message = response.json()["detail"]
         return sent, message
 
-    def retrieve_greeting_messages(self) -> list[str]:
+    def retrieve_greeting_messages(self) -> List[str]:
         """
         Retrieve greeting messages that are new for the user.
         """
